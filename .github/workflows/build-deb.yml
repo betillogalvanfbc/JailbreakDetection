@@ -39,10 +39,29 @@ jobs:
           APP_PATH="build/JailbreakDetector.xcarchive/Products/Applications/JailbreakDetectorApp.app"
           BINARY="$APP_PATH/JailbreakDetectorApp"
           
-          # Fake sign with entitlements
+          # 1. Sign App Extensions (PlugIns) separately FIRST
+          if [ -d "$APP_PATH/PlugIns" ]; then
+            echo "🔌 Signing App Extensions..."
+            for EXT in "$APP_PATH/PlugIns"/*.appex; do
+              if [ -d "$EXT" ]; then
+                EXT_BINARY="$EXT/$(basename "$EXT" .appex)"
+                echo "   - Signing extension: $(basename "$EXT")"
+                # Use simple ad-hoc signing for extensions or try to use specific entitlements if available
+                # using -S to sign with ad-hoc/pseudo-sign
+                ldid -S "$EXT_BINARY"
+              fi
+            done
+          else
+             echo "⚠️ No PlugIns directory found - Widget might not be built"
+             # List contents to debug
+             ls -R "$APP_PATH"
+          fi
+
+          # 2. Fake sign Main App with entitlements
+          echo "📱 Signing Main App..."
           ldid -SJailbreakDetector/JailbreakDetector/JailbreakDetector.entitlements "$BINARY"
           
-          echo "✅ Fake signed app with ldid"
+          echo "✅ Fake signed app and extensions with ldid"
           ldid -e "$BINARY"
       
       - name: Get version
