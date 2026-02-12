@@ -60,16 +60,16 @@ jobs:
         run: |
           # Build for iphoneos-arm
           mkdir -p package-arm/DEBIAN
-          mkdir -p package-arm/Applications
+          mkdir -p package-arm/var/jb/Applications
           cp -R build/JailbreakDetector.xcarchive/Products/Applications/JailbreakDetectorApp.app \
-            package-arm/Applications/JailbreakDetector.app
+            package-arm/var/jb/Applications/JailbreakDetector.app
           
           cat > package-arm/DEBIAN/control << EOF
           Package: com.security.jailbreakdetector
           Name: Jailbreak Detector
           Version: ${{ steps.version.outputs.VERSION }}
           Architecture: iphoneos-arm
-          Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant)
+          Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant). Compatible with rootless and rootful jailbreaks.
           Homepage: https://github.com/betillogalvanfbc/jailbreakdetection
           Maintainer: Developer
           Author: Developer
@@ -79,23 +79,34 @@ jobs:
           
           cat > package-arm/DEBIAN/postinst << 'EOF'
           #!/bin/bash
-          uicache -a
+          
+          # Detect jailbreak type and create symlink if rootful
+          if [ ! -d "/var/jb" ]; then
+            # Rootful jailbreak - create symlink from /Applications to /var/jb/Applications
+            if [ ! -L "/Applications/JailbreakDetector.app" ]; then
+              ln -sf /var/jb/Applications/JailbreakDetector.app /Applications/JailbreakDetector.app 2>/dev/null || true
+            fi
+          fi
+          
+          # Register app with system
+          uicache -a 2>/dev/null || uicache -p /var/jb/Applications/JailbreakDetector.app 2>/dev/null || true
+          
           exit 0
           EOF
           chmod 755 package-arm/DEBIAN/postinst
           
           # Build for iphoneos-arm64
           mkdir -p package-arm64/DEBIAN
-          mkdir -p package-arm64/Applications
+          mkdir -p package-arm64/var/jb/Applications
           cp -R build/JailbreakDetector.xcarchive/Products/Applications/JailbreakDetectorApp.app \
-            package-arm64/Applications/JailbreakDetector.app
+            package-arm64/var/jb/Applications/JailbreakDetector.app
           
           cat > package-arm64/DEBIAN/control << EOF
           Package: com.security.jailbreakdetector
           Name: Jailbreak Detector
           Version: ${{ steps.version.outputs.VERSION }}
           Architecture: iphoneos-arm64
-          Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant)
+          Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant). Compatible with rootless and rootful jailbreaks.
           Homepage: https://github.com/betillogalvanfbc/jailbreakdetection
           Maintainer: Developer
           Author: Developer
@@ -105,7 +116,18 @@ jobs:
           
           cat > package-arm64/DEBIAN/postinst << 'EOF'
           #!/bin/bash
-          uicache -a
+          
+          # Detect jailbreak type and create symlink if rootful
+          if [ ! -d "/var/jb" ]; then
+            # Rootful jailbreak - create symlink from /Applications to /var/jb/Applications
+            if [ ! -L "/Applications/JailbreakDetector.app" ]; then
+              ln -sf /var/jb/Applications/JailbreakDetector.app /Applications/JailbreakDetector.app 2>/dev/null || true
+            fi
+          fi
+          
+          # Register app with system
+          uicache -a 2>/dev/null || uicache -p /var/jb/Applications/JailbreakDetector.app 2>/dev/null || true
+          
           exit 0
           EOF
           chmod 755 package-arm64/DEBIAN/postinst
