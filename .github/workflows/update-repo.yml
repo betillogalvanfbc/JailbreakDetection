@@ -1,0 +1,78 @@
+name: Update Cydia Repository
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  update-repo:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+      
+      - name: Download release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get version from tag
+          VERSION=${GITHUB_REF#refs/tags/v}
+          
+          # Wait for .deb to be created
+          sleep 60
+          
+          # Download .deb from release
+          gh release download v${VERSION} \
+            --pattern "*.deb" \
+            --dir ./debs/ || echo "Waiting for deb..."
+      
+      - name: Install dpkg tools
+        run: brew install dpkg
+      
+      - name: Generate Packages file
+        run: |
+          cd debs
+          dpkg-scanpackages -m . /dev/null > ../Packages
+          cd ..
+          
+          # Compress Packages
+          gzip -k -f Packages
+          bzip2 -k -f Packages
+      
+      - name: Update Release file
+        run: |
+          cat > Release << EOF
+          Origin: Jailbreak Detector Repo
+          Label: Jailbreak Detector
+          Suite: stable
+          Version: 1.0
+          Codename: ios
+          Architectures: iphoneos-arm64
+          Components: main
+          Description: Official repository for Jailbreak Detector
+          Date: $(date -u '+%a, %d %b %Y %H:%M:%S %z')
+          MD5Sum:
+          EOF
+          
+          # Add checksums
+          for file in Packages Packages.gz Packages.bz2; do
+            if [ -f "$file" ]; then
+              echo " $(md5 -q $file) $(wc -c < $file) $file" >> Release
+            fi
+          done
+      
+      - name: Commit and push
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "Update repository: ${GITHUB_REF#refs/tags/}" || echo "No changes"
+          git push origin gh-pages
