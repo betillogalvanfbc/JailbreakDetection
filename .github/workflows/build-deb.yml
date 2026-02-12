@@ -60,9 +60,9 @@ jobs:
         run: |
           # Build for iphoneos-arm
           mkdir -p package-arm/DEBIAN
-          mkdir -p package-arm/var/jb/Applications
+          mkdir -p package-arm/Applications
           cp -R build/JailbreakDetector.xcarchive/Products/Applications/JailbreakDetectorApp.app \
-            package-arm/var/jb/Applications/JailbreakDetector.app
+            package-arm/Applications/JailbreakDetector.app
           
           cat > package-arm/DEBIAN/control << EOF
           Package: com.security.jailbreakdetector
@@ -80,16 +80,17 @@ jobs:
           cat > package-arm/DEBIAN/postinst << 'EOF'
           #!/bin/bash
           
-          # Detect jailbreak type and create symlink if rootful
-          if [ ! -d "/var/jb" ]; then
-            # Rootful jailbreak - create symlink from /Applications to /var/jb/Applications
-            if [ ! -L "/Applications/JailbreakDetector.app" ]; then
-              ln -sf /var/jb/Applications/JailbreakDetector.app /Applications/JailbreakDetector.app 2>/dev/null || true
+          # Detect jailbreak type and create symlink for rootless
+          if [ -d "/var/jb" ]; then
+            # Rootless jailbreak - create symlink in /var/jb/Applications
+            mkdir -p /var/jb/Applications 2>/dev/null || true
+            if [ ! -L "/var/jb/Applications/JailbreakDetector.app" ]; then
+              ln -sf /Applications/JailbreakDetector.app /var/jb/Applications/JailbreakDetector.app 2>/dev/null || true
             fi
           fi
           
           # Register app with system
-          uicache -a 2>/dev/null || uicache -p /var/jb/Applications/JailbreakDetector.app 2>/dev/null || true
+          uicache -a 2>/dev/null || uicache -p /Applications/JailbreakDetector.app 2>/dev/null || true
           
           exit 0
           EOF
@@ -97,9 +98,9 @@ jobs:
           
           # Build for iphoneos-arm64
           mkdir -p package-arm64/DEBIAN
-          mkdir -p package-arm64/var/jb/Applications
+          mkdir -p package-arm64/Applications
           cp -R build/JailbreakDetector.xcarchive/Products/Applications/JailbreakDetectorApp.app \
-            package-arm64/var/jb/Applications/JailbreakDetector.app
+            package-arm64/Applications/JailbreakDetector.app
           
           cat > package-arm64/DEBIAN/control << EOF
           Package: com.security.jailbreakdetector
@@ -117,16 +118,17 @@ jobs:
           cat > package-arm64/DEBIAN/postinst << 'EOF'
           #!/bin/bash
           
-          # Detect jailbreak type and create symlink if rootful
-          if [ ! -d "/var/jb" ]; then
-            # Rootful jailbreak - create symlink from /Applications to /var/jb/Applications
-            if [ ! -L "/Applications/JailbreakDetector.app" ]; then
-              ln -sf /var/jb/Applications/JailbreakDetector.app /Applications/JailbreakDetector.app 2>/dev/null || true
+          # Detect jailbreak type and create symlink for rootless
+          if [ -d "/var/jb" ]; then
+            # Rootless jailbreak - create symlink in /var/jb/Applications
+            mkdir -p /var/jb/Applications 2>/dev/null || true
+            if [ ! -L "/var/jb/Applications/JailbreakDetector.app" ]; then
+              ln -sf /Applications/JailbreakDetector.app /var/jb/Applications/JailbreakDetector.app 2>/dev/null || true
             fi
           fi
           
           # Register app with system
-          uicache -a 2>/dev/null || uicache -p /var/jb/Applications/JailbreakDetector.app 2>/dev/null || true
+          uicache -a 2>/dev/null || uicache -p /Applications/JailbreakDetector.app 2>/dev/null || true
           
           exit 0
           EOF
