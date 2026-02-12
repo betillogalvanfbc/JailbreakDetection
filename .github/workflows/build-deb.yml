@@ -139,3 +139,49 @@ jobs:
             jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm.deb \
             jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm64.deb \
             --clobber
+
+      - name: Update Cydia Repo
+        run: |
+          # Checkout gh-pages branch to 'repo' directory
+          git clone --branch gh-pages --depth 1 https://github.com/${{ github.repository }}.git repo
+          
+          # Copy new debs
+          mkdir -p repo/debs
+          cp *.deb repo/debs/
+          
+          # Generate Packages
+          cd repo
+          dpkg-scanpackages -m . /dev/null > Packages
+          
+          # Compress
+          rm -f Packages.gz Packages.bz2
+          gzip -k -f Packages
+          bzip2 -k -f Packages
+          
+          # Update Release file
+          cat > Release << EOF
+          Origin: Jailbreak Detector Repo
+          Label: Jailbreak Detector
+          Suite: stable
+          Version: 1.0
+          Codename: ios
+          Architectures: iphoneos-arm iphoneos-arm64
+          Components: main
+          Description: Official repository for Jailbreak Detector
+          Date: $(date -u '+%a, %d %b %Y %H:%M:%S %z')
+          MD5Sum:
+          EOF
+          
+          # Add checksums
+          for file in Packages Packages.gz Packages.bz2; do
+            if [ -f "$file" ]; then
+              echo " $(md5 -q $file | cut -d ' ' -f1) $(wc -c < $file | xargs) $file" >> Release
+            fi
+          done
+          
+          # Commit and Push
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "Update repo for release ${{ steps.version.outputs.VERSION }}" || echo "No changes"
+          git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:gh-pages
