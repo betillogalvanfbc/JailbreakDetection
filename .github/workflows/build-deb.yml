@@ -50,7 +50,7 @@ jobs:
           Version: ${{ steps.version.outputs.VERSION }}
           Architecture: iphoneos-arm
           Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant)
-          Homepage: https://github.com/betillogalvanfbc/JailbreakDetection
+          Homepage: https://github.com/betillogalvanfbc/jailbreakdetection
           Maintainer: Developer
           Author: Developer
           Section: Security
@@ -76,7 +76,7 @@ jobs:
           Version: ${{ steps.version.outputs.VERSION }}
           Architecture: iphoneos-arm64
           Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant)
-          Homepage: https://github.com/betillogalvanfbc/JailbreakDetection
+          Homepage: https://github.com/betillogalvanfbc/jailbreakdetection
           Maintainer: Developer
           Author: Developer
           Section: Security
