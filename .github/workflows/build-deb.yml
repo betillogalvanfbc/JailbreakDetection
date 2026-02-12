@@ -59,8 +59,8 @@ jobs:
           
           cat > package-arm/DEBIAN/postinst << 'EOF'
           #!/bin/bash
-          uicache -p /Applications/JailbreakDetector.app
-          killall -9 SpringBoard
+          uicache -a
+          exit 0
           EOF
           chmod 755 package-arm/DEBIAN/postinst
           
@@ -85,8 +85,8 @@ jobs:
           
           cat > package-arm64/DEBIAN/postinst << 'EOF'
           #!/bin/bash
-          uicache -p /Applications/JailbreakDetector.app
-          killall -9 SpringBoard
+          uicache -a
+          exit 0
           EOF
           chmod 755 package-arm64/DEBIAN/postinst
       
