@@ -6,8 +6,8 @@ Codename: ios
 Architectures: iphoneos-arm iphoneos-arm64
 Components: main
 Description: Official repository for Jailbreak Detector
-Date: Wed, 12 Feb 2026 06:36:00 +0000
+Date: Wed, 12 Feb 2026 07:10:00 +0000
 MD5Sum:
- 21701f37c11705fe1857634a1bf0a9bc 911 Packages
- bf0e5be9be705197d5016785ea72d538 371 Packages.gz
- 1d20a65e60ae20f4a0ccdceaf99cff29 453 Packages.bz2
+ f6029ab3063cdc850edfd75d98d4a7ba 1011 Packages
+ 2eb18ca5ad2da0f7ad93fc5dfda0ea91 399 Packages.gz
+ 06c6c43eba3f0eca19b6a56adc7e1ca9 491 Packages.bz2
