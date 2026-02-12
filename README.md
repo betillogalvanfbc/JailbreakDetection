@@ -12,14 +12,14 @@ Advanced iOS jailbreak detection app with 8 security techniques compliant with O
 2. **Go to Sources/Repos**
 3. **Add this repository:**
    ```
-   https://betillogalvanfbc.github.io/JailbreakDetection/
+   https://betillogalvanfbc.github.io/jailbreakdetection/
    ```
 4. **Search for "Jailbreak Detector"**
 5. **Install**
 
 ### Method 2: Download .deb Manually
 
-1. **Go to [Releases](https://github.com/betillogalvanfbc/JailbreakDetection/releases)**
+1. **Go to [Releases](https://github.com/betillogalvanfbc/jailbreakdetection/releases)**
 2. **Download latest `.deb` file**
 3. **Install with Filza or terminal:**
    ```bash
@@ -60,7 +60,7 @@ Advanced iOS jailbreak detection app with 8 security techniques compliant with O
 ## 📦 Package Information
 
 - **Package ID:** `com.security.jailbreakdetector`
-- **Version:** See [Releases](https://github.com/betillogalvanfbc/JailbreakDetection/releases)
+- **Version:** See [Releases](https://github.com/betillogalvanfbc/jailbreakdetection/releases)
 - **Size:** ~2MB
 - **Dependencies:** iOS/iPadOS 16.0+
 - **Architecture:** arm64 (iPhone 5s and newer)
@@ -73,8 +73,8 @@ Advanced iOS jailbreak detection app with 8 security techniques compliant with O
 
 ```bash
 # Clone repository
-git clone https://github.com/betillogalvanfbc/JailbreakDetection.git
-cd JailbreakDetection
+git clone https://github.com/betillogalvanfbc/jailbreakdetection.git
+cd jailbreakdetection
 
 # Open in Xcode
 open JailbreakDetector.xcodeproj
@@ -104,8 +104,8 @@ open JailbreakDetector.xcodeproj
 
 ## 🆘 Support
 
-- **Issues:** [GitHub Issues](https://github.com/betillogalvanfbc/JailbreakDetection/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/betillogalvanfbc/JailbreakDetection/discussions)
+- **Issues:** [GitHub Issues](https://github.com/betillogalvanfbc/jailbreakdetection/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/betillogalvanfbc/jailbreakdetection/discussions)
 
 ---
 
@@ -121,6 +121,6 @@ This app is for **educational and security research purposes**. It demonstrates 
 
 ---
 
-**Repository URL:** `https://betillogalvanfbc.github.io/JailbreakDetection/`
+**Repository URL:** `https://betillogalvanfbc.github.io/jailbreakdetection/`
 
 Add this to Cydia/Sileo/Zebra to install and receive updates automatically.

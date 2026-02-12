@@ -3,7 +3,7 @@ Name: Jailbreak Detector
 Version: 1.2.0
 Architecture: iphoneos-arm
 Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant)
-Homepage: https://github.com/betillogalvanfbc/JailbreakDetection
+Homepage: https://github.com/betillogalvanfbc/jailbreakdetection
 Maintainer: Developer
 Section: Security
 Depends: firmware (>= 16.0)
@@ -14,7 +14,7 @@ Name: Jailbreak Detector
 Version: 1.2.0
 Architecture: iphoneos-arm64
 Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant)
-Homepage: https://github.com/betillogalvanfbc/JailbreakDetection
+Homepage: https://github.com/betillogalvanfbc/jailbreakdetection
 Maintainer: Developer
 Section: Security
 Depends: firmware (>= 16.0)
