@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jailbreak Detector - Cydia Repo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .repo-url {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 20px 0;
+            word-break: break-all;
+        }
+        .button {
+            display: inline-block;
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: transform 0.2s;
+        }
+        .button:hover {
+            transform: scale(1.05);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ Jailbreak Detector</h1>
+        <p style="font-size: 1.2em; opacity: 0.9;">Advanced security detection for jailbroken iOS devices</p>
+        
+        <div class="badges">
+            <span class="badge">iOS 16+</span>
+            <span class="badge">OWASP MSTG</span>
+            <span class="badge">8 Detection Techniques</span>
+            <span class="badge">Widget Support</span>
+        </div>
+
+        <h2>📦 Add to Cydia/Sileo/Zebra</h2>
+        <div class="repo-url">
+            https://betillogalvanfbc.github.io/JailbreakDetection/
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="cydia://url/https://cydia.saurik.com/api/share#?source=https://betillogalvanfbc.github.io/JailbreakDetection/" class="button">
+                Add to Cydia
+            </a>
+            <a href="sileo://source/https://betillogalvanfbc.github.io/JailbreakDetection/" class="button">
+                Add to Sileo
+            </a>
+            <a href="zbra://sources/add/https://betillogalvanfbc.github.io/JailbreakDetection/" class="button">
+                Add to Zebra
+            </a>
+        </div>
+
+        <h2>✨ Features</h2>
+        <div class="features">
+            <div class="feature">
+                <h3>🔍 Detection</h3>
+                <p>8 advanced techniques to detect jailbreak</p>
+            </div>
+            <div class="feature">
+                <h3>📱 Widget</h3>
+                <p>Home screen widgets in 3 sizes</p>
+            </div>
+            <div class="feature">
+                <h3>⚡ Real-time</h3>
+                <p>Always-on security monitoring</p>
+            </div>
+            <div class="feature">
+                <h3>🎨 Modern UI</h3>
+                <p>Beautiful SwiftUI design</p>
+            </div>
+        </div>
+
+        <h2>📥 Manual Installation</h2>
+        <p>Download the latest .deb package from:</p>
+        <a href="https://github.com/betillogalvanfbc/JailbreakDetection/releases" class="button">
+            GitHub Releases
+        </a>
+
+        <h2>ℹ️ About</h2>
+        <p>Jailbreak Detector is an open-source security tool that demonstrates jailbreak detection techniques based on OWASP Mobile Security Testing Guide (MSTG-RESILIENCE-1).</p>
+        
+        <p style="opacity: 0.7; font-size: 0.9em; margin-top: 40px;">
+            Made with ❤️ for the jailbreak community
+        </p>
+    </div>
+</body>
+</html>

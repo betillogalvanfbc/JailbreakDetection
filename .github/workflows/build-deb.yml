@@ -1,0 +1,79 @@
+name: Build Debian Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-deb:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Build app
+        run: |
+          xcodebuild archive \
+            -project JailbreakDetector.xcodeproj \
+            -scheme JailbreakDetector \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath build/JailbreakDetector.xcarchive \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+      
+      - name: Get version
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      
+      - name: Create .deb package structure
+        run: |
+          mkdir -p package/DEBIAN
+          mkdir -p package/Applications
+          
+          # Copy app to package
+          cp -R build/JailbreakDetector.xcarchive/Products/Applications/JailbreakDetectorApp.app \
+            package/Applications/JailbreakDetector.app
+          
+          # Create control file
+          cat > package/DEBIAN/control << EOF
+          Package: com.security.jailbreakdetector
+          Name: Jailbreak Detector
+          Version: ${{ steps.version.outputs.VERSION }}
+          Architecture: iphoneos-arm64
+          Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant)
+          Homepage: https://github.com/betillogalvanfbc/JailbreakDetection
+          Maintainer: Your Name <your@email.com>
+          Author: Your Name <your@email.com>
+          Section: Security
+          Depends: firmware (>= 16.0)
+          EOF
+          
+          # Create postinst script (optional)
+          cat > package/DEBIAN/postinst << 'EOF'
+          #!/bin/bash
+          uicache -p /Applications/JailbreakDetector.app
+          killall -9 SpringBoard
+          EOF
+          chmod 755 package/DEBIAN/postinst
+      
+      - name: Build .deb
+        run: |
+          dpkg-deb -b package jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm64.deb
+          
+          # Show package info
+          dpkg-deb -I jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm64.deb
+      
+      - name: Upload to release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload v${{ steps.version.outputs.VERSION }} \
+            jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm64.deb \
+            --clobber

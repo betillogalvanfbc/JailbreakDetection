@@ -1,0 +1,13 @@
+{
+    "name": "Jailbreak Detector",
+    "identifier": "com.security.jailbreakdetector.repo",
+    "subtitle": "Advanced Security Detection",
+    "description": "Official repository for Jailbreak Detector - Advanced jailbreak detection with 8 OWASP MSTG compliant techniques",
+    "iconURL": "https://betillogalvanfbc.github.io/JailbreakDetection/icon.png",
+    "headerURL": "https://betillogalvanfbc.github.io/JailbreakDetection/header.png",
+    "website": "https://github.com/betillogalvanfbc/JailbreakDetection",
+    "tintColor": "#667eea",
+    "featuredPackages": [
+        "com.security.jailbreakdetector"
+    ]
+}
