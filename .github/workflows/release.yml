@@ -93,18 +93,19 @@ jobs:
       
       - name: Upload project archive (if exists)
         if: success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -d "${{ github.workspace }}/build/JailbreakDetector.xcarchive" ]; then
             cd ${{ github.workspace }}/build
             zip -r JailbreakDetector-${{ steps.get_version.outputs.VERSION }}.xcarchive.zip JailbreakDetector.xcarchive
             
-            # Upload to release
-            curl -L \
-              -X POST \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Content-Type: application/zip" \
-              --data-binary @JailbreakDetector-${{ steps.get_version.outputs.VERSION }}.xcarchive.zip \
-              "${{ steps.create_release.outputs.upload_url }}?name=JailbreakDetector-${{ steps.get_version.outputs.VERSION }}.xcarchive.zip&label=Xcode Archive"
+            # Upload using GitHub CLI (más confiable que curl)
+            gh release upload ${{ steps.get_version.outputs.VERSION }} \
+              JailbreakDetector-${{ steps.get_version.outputs.VERSION }}.xcarchive.zip \
+              --clobber
+            
+            echo "✅ Archive uploaded successfully"
+          else
+            echo "⚠️  .xcarchive not found"
           fi
-        continue-on-error: true
