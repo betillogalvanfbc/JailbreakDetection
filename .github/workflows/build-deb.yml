@@ -36,48 +36,77 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
       
-      - name: Create .deb package structure
+      - name: Create .deb packages for both architectures
         run: |
-          mkdir -p package/DEBIAN
-          mkdir -p package/Applications
-          
-          # Copy app to package
+          # Build for iphoneos-arm
+          mkdir -p package-arm/DEBIAN
+          mkdir -p package-arm/Applications
           cp -R build/JailbreakDetector.xcarchive/Products/Applications/JailbreakDetectorApp.app \
-            package/Applications/JailbreakDetector.app
+            package-arm/Applications/JailbreakDetector.app
           
-          # Create control file
-          cat > package/DEBIAN/control << EOF
+          cat > package-arm/DEBIAN/control << EOF
           Package: com.security.jailbreakdetector
           Name: Jailbreak Detector
           Version: ${{ steps.version.outputs.VERSION }}
           Architecture: iphoneos-arm
           Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant)
           Homepage: https://github.com/betillogalvanfbc/JailbreakDetection
-          Maintainer: Your Name <your@email.com>
-          Author: Your Name <your@email.com>
+          Maintainer: Developer
+          Author: Developer
           Section: Security
           Depends: firmware (>= 16.0)
           EOF
           
-          # Create postinst script (optional)
-          cat > package/DEBIAN/postinst << 'EOF'
+          cat > package-arm/DEBIAN/postinst << 'EOF'
           #!/bin/bash
           uicache -p /Applications/JailbreakDetector.app
           killall -9 SpringBoard
           EOF
-          chmod 755 package/DEBIAN/postinst
-      
-      - name: Build .deb
-        run: |
-          dpkg-deb -b package jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm.deb
+          chmod 755 package-arm/DEBIAN/postinst
           
-          # Show package info
-          dpkg-deb -I jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm.deb
+          # Build for iphoneos-arm64
+          mkdir -p package-arm64/DEBIAN
+          mkdir -p package-arm64/Applications
+          cp -R build/JailbreakDetector.xcarchive/Products/Applications/JailbreakDetectorApp.app \
+            package-arm64/Applications/JailbreakDetector.app
+          
+          cat > package-arm64/DEBIAN/control << EOF
+          Package: com.security.jailbreakdetector
+          Name: Jailbreak Detector
+          Version: ${{ steps.version.outputs.VERSION }}
+          Architecture: iphoneos-arm64
+          Description: Advanced jailbreak detection with 8 techniques (OWASP MSTG compliant)
+          Homepage: https://github.com/betillogalvanfbc/JailbreakDetection
+          Maintainer: Developer
+          Author: Developer
+          Section: Security
+          Depends: firmware (>= 16.0)
+          EOF
+          
+          cat > package-arm64/DEBIAN/postinst << 'EOF'
+          #!/bin/bash
+          uicache -p /Applications/JailbreakDetector.app
+          killall -9 SpringBoard
+          EOF
+          chmod 755 package-arm64/DEBIAN/postinst
       
-      - name: Upload to release
+      - name: Build .deb packages
+        run: |
+          # Build iphoneos-arm
+          dpkg-deb -b package-arm jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm.deb
+          echo "=== iphoneos-arm .deb info ==="
+          dpkg-deb -I jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm.deb
+          
+          # Build iphoneos-arm64
+          dpkg-deb -b package-arm64 jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm64.deb
+          echo "=== iphoneos-arm64 .deb info ==="
+          dpkg-deb -I jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm64.deb
+      
+      - name: Upload both .deb packages to release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release upload v${{ steps.version.outputs.VERSION }} \
             jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm.deb \
+            jailbreakdetector_${{ steps.version.outputs.VERSION }}_iphoneos-arm64.deb \
             --clobber
