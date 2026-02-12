@@ -3,7 +3,11 @@ name: iOS Release Build
 on:
   push:
     tags:
-      - 'v1.0.0'  # Trigger on version tags like v1.0.0, v1.0.1, etc.
+      - 'v*'  # Trigger on version tags like v1.0.0, v1.0.1, etc.
+
+permissions:
+  contents: write
+  releases: write
 
 jobs:
   build-and-release:
