@@ -45,10 +45,16 @@ jobs:
             for EXT in "$APP_PATH/PlugIns"/*.appex; do
               if [ -d "$EXT" ]; then
                 EXT_BINARY="$EXT/$(basename "$EXT" .appex)"
-                echo "   - Signing extension: $(basename "$EXT")"
-                # Use simple ad-hoc signing for extensions or try to use specific entitlements if available
-                # using -S to sign with ad-hoc/pseudo-sign
-                ldid -S "$EXT_BINARY"
+                EXT_NAME="$(basename "$EXT" .appex)"
+                echo "   - Signing extension: $EXT_NAME"
+                
+                # Check if it's the Widget and use specific entitlements
+                if [[ "$EXT_NAME" == "JailbreakWidget" ]]; then
+                   ldid -SJailbreakDetector/JailbreakWidget/JailbreakWidget.entitlements "$EXT_BINARY"
+                else
+                   # Fallback for other extensions
+                   ldid -S "$EXT_BINARY"
+                fi
               fi
             done
           else
